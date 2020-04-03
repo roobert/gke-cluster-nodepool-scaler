@@ -12,3 +12,7 @@ PROJECT_ID=project0 ZONE=europe-west1-b CLUSTER=cluster0 NODEPOOL=nodepool0 NODE
 PROJECT_ID=project0 ZONE=europe-west1-b CLUSTER=cluster0 NODEPOOL=nodepool0 main.py
 PROJECT_ID=project0 ZONE=europe-west1-b CLUSTER=cluster0 NODEPOOL=nodepool0 main.py
 ```
+
+## Deployment
+
+See (gke-cluster-nodepool-scaler.tf)[gke-cluster-nodepool-scaler.tf].
