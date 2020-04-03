@@ -14,11 +14,19 @@ from oauth2client.client import GoogleCredentials
 def main(event, context):
     print(f"event: {event}")
     print(f"context: {context}")
-    nodes = event["nodes"]
+
+    if event.get("nodes"):
+        nodes = event["nodes"]
+    else:
+        nodes = 0
+
     gke_nodepool_scaler(nodes)
 
 
-def gke_nodepool_scaler(nodes=os.environ["NODES"]):
+def gke_nodepool_scaler(nodes=0):
+    if os.environ.get("NODES"):
+        nodes = os.environ["NODES"]
+
     try:
         nodepool_scaler = GKEClusterNodepoolScaler(
             project_id=os.environ["PROJECT_ID"],
