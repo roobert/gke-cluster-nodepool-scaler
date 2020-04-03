@@ -15,4 +15,4 @@ PROJECT_ID=project0 ZONE=europe-west1-b CLUSTER=cluster0 NODEPOOL=nodepool0 main
 
 ## Deployment
 
-See (gke-cluster-nodepool-scaler.tf)[gke-cluster-nodepool-scaler.tf].
+See [gke-cluster-nodepool-scaler.tf](gke-cluster-nodepool-scaler.tf).
