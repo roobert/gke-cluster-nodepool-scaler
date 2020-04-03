@@ -6,6 +6,8 @@
 # * https://cloud.google.com/kubernetes-engine/docs/reference/rest/v1/projects.zones.clusters.nodePools/setSize
 
 import os
+import json
+from base64 import b64decode
 from dataclasses import dataclass, field
 from googleapiclient import discovery
 from oauth2client.client import GoogleCredentials
@@ -15,10 +17,13 @@ def main(event, context):
     print(f"event: {event}")
     print(f"context: {context}")
 
-    if event.get("nodes"):
-        nodes = event["nodes"]
-    else:
-        nodes = 0
+    nodes = 0
+    data = event.get("data")
+
+    if data:
+        payload = json.loads(b64decode(data))
+        if payload.get("nodes"):
+            nodes = payload["nodes"]
 
     gke_nodepool_scaler(nodes)
 
