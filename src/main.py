@@ -82,6 +82,9 @@ class GKEClusterNodepoolScaler:
                 body=request_body,
             )
         )
+        print(
+            f"scaling cluster nodepool '{self.project_id}/{self.zone}/{self.cluster}/{self.nodepool}' nodes to: {self.nodes}"
+        )
         response = request.execute()
 
         print(response)
