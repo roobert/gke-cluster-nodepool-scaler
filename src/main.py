@@ -13,25 +13,21 @@ from googleapiclient import discovery
 from oauth2client.client import GoogleCredentials
 
 
+# entrypoint when called from GCP function
 def main(event, context):
     print(f"event: {event}")
     print(f"context: {context}")
 
     nodes = 0
-    data = event.get("data")
-
-    if data:
-        payload = json.loads(b64decode(data))
+    if event.get("data"):
+        payload = json.loads(b64decode(event["data"]))
         if payload.get("nodes"):
             nodes = payload["nodes"]
 
     gke_nodepool_scaler(nodes)
 
 
-def gke_nodepool_scaler(nodes=0):
-    if os.environ.get("NODES"):
-        nodes = os.environ["NODES"]
-
+def gke_nodepool_scaler(nodes):
     try:
         nodepool_scaler = GKEClusterNodepoolScaler(
             project_id=os.environ["PROJECT_ID"],
@@ -40,9 +36,10 @@ def gke_nodepool_scaler(nodes=0):
             nodepool=os.environ["NODEPOOL"],
             nodes=nodes,
         )
-        nodepool_scaler.scale()
     except KeyError as error:
         raise KeyError(f"environment variable not set: {error}")
+
+    nodepool_scaler.scale()
 
 
 @dataclass
@@ -57,17 +54,13 @@ class GKEClusterNodepoolScaler:
     def __post_init__(self):
         credentials = GoogleCredentials.get_application_default()
         self.service = discovery.build(
-            "container", "v1", credentials=credentials, cache_discovery=False
+            "container", "v1beta1", credentials=credentials, cache_discovery=False
         )
 
     def scale(self):
-        request_body = {
-            "nodeCount": self.nodes,
-            "name": f"projects/{self.project_id}"
-            f"/locations/{self.zone}"
-            f"/clusters/{self.cluster}"
-            f"/nodePools/{self.nodepool}",
-        }
+        print(
+            f"scaling cluster nodepool '{self.project_id}/{self.zone}/{self.cluster}/{self.nodepool}' nodes to: {self.nodes}"
+        )
 
         request = (
             self.service.projects()
@@ -79,16 +72,18 @@ class GKEClusterNodepoolScaler:
                 zone=self.zone,
                 clusterId=self.cluster,
                 nodePoolId=self.nodepool,
-                body=request_body,
+                body={"nodeCount": self.nodes},
             )
         )
-        print(
-            f"scaling cluster nodepool '{self.project_id}/{self.zone}/{self.cluster}/{self.nodepool}' nodes to: {self.nodes}"
-        )
+
         response = request.execute()
 
-        print(response)
+        print(json.dumps(response))
 
 
 if __name__ == "__main__":
-    gke_nodepool_scaler()
+    nodes = 0
+    if os.environ.get("NODES"):
+        nodes = os.environ["NODES"]
+
+    gke_nodepool_scaler(nodes)
