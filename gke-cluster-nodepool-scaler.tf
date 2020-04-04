@@ -43,7 +43,7 @@ resource "google_cloud_scheduler_job" "gke-cluster-nodepool-scaler-scale-down" {
 
   pubsub_target {
     topic_name = google_pubsub_topic.gke-cluster-nodepool-scaler.id
-    data       = base64encode(var.min_nodes)
+    data       = base64encode(jsonencode({ "nodes" = var.min_nodes }))
   }
 }
 
@@ -53,6 +53,6 @@ resource "google_cloud_scheduler_job" "gke-cluster-nodepool-scaler-scale-up" {
 
   pubsub_target {
     topic_name = google_pubsub_topic.gke-cluster-nodepool-scaler.id
-    data       = base64encode(var.max_nodes)
+    data       = base64encode(jsonencode({ "nodes" = var.max_nodes }))
   }
 }
