@@ -39,7 +39,7 @@ resource "google_pubsub_topic" "gke-cluster-nodepool-scaler" {
 
 resource "google_cloud_scheduler_job" "gke-cluster-nodepool-scaler-scale-down" {
   name     = "gke-cluster-nodepool-scaler-scale-down"
-  schedule = "0 0 * * *"
+  schedule = "0 0 * * 2,3,4,5,6"
 
   pubsub_target {
     topic_name = google_pubsub_topic.gke-cluster-nodepool-scaler.id
@@ -49,7 +49,7 @@ resource "google_cloud_scheduler_job" "gke-cluster-nodepool-scaler-scale-down" {
 
 resource "google_cloud_scheduler_job" "gke-cluster-nodepool-scaler-scale-up" {
   name     = "gke-cluster-nodepool-scaler-scale-up"
-  schedule = "0 8 * * *"
+  schedule = "0 8 * * 1,2,3,4,5"
 
   pubsub_target {
     topic_name = google_pubsub_topic.gke-cluster-nodepool-scaler.id
