@@ -1,6 +1,6 @@
 # GKE Cluster Nodepool Scaler
 
-Functions which can be triggered to scale a cluster nodepool up or down.
+A Function which can be triggered to scale a cluster nodepool up or down.
 
 ## Example
 ```
