@@ -2,6 +2,8 @@
 
 A GCP Function to scale GKE cluster nodepools up or down.
 
+Read more in this [blog post](https://roobert.github.io/2020/04/04/GKE-Cluster-Nodepool-Scaler/)!
+
 ## Local Testing
 ```
 PROJECT_ID=project0
