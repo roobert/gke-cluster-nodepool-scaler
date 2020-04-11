@@ -12,5 +12,5 @@ if [[ $# != 2 ]]; then
 fi
 
 for project in ${PROJECTS}; do
-  gcloud --project "${PROJECT}" pubsub topics publish "${TOPIC}" --message "{\"nodes\":${NODE_COUNT}}"
+  gcloud --project "${project}" pubsub topics publish "${TOPIC}" --message "{\"nodes\":${NODE_COUNT}}"
 done
